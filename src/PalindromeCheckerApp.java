@@ -1,10 +1,21 @@
 import java.util.Scanner;
 
-class PalindromeChecker {
+interface PalindromeStrategy {
+    boolean checkPalindrome(String str);
+}
+
+class ReverseStrategy implements PalindromeStrategy {
+
+    public boolean checkPalindrome(String str) {
+        String reversed = new StringBuilder(str).reverse().toString();
+        return str.equals(reversed);
+    }
+}
+
+class TwoPointerStrategy implements PalindromeStrategy {
 
     public boolean checkPalindrome(String str) {
 
-        str = str.replaceAll("\\s+", "").toLowerCase();
         int start = 0;
         int end = str.length() - 1;
 
@@ -20,22 +31,39 @@ class PalindromeChecker {
     }
 }
 
+class PalindromeContext {
+
+    private PalindromeStrategy strategy;
+
+    public void setStrategy(PalindromeStrategy strategy) {
+        this.strategy = strategy;
+    }
+
+    public boolean executeStrategy(String str) {
+        return strategy.checkPalindrome(str);
+    }
+}
+
 public class PalindromeCheckerApp {
 
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("PALINDROME CHECKER APP - UC11");
+        System.out.println("PALINDROME CHECKER APP - UC12");
         System.out.print("Enter a string: ");
         String input = scanner.nextLine();
 
-        PalindromeChecker checker = new PalindromeChecker();
+        PalindromeContext context = new PalindromeContext();
 
-        if (checker.checkPalindrome(input))
-            System.out.println("Result: " + input + " is a Palindrome");
-        else
-            System.out.println("Result: " + input + " is NOT a Palindrome");
+        context.setStrategy(new ReverseStrategy());
+        boolean result1 = context.executeStrategy(input);
+
+        context.setStrategy(new TwoPointerStrategy());
+        boolean result2 = context.executeStrategy(input);
+
+        System.out.println("Reverse Strategy Result: " + result1);
+        System.out.println("Two Pointer Strategy Result: " + result2);
 
         scanner.close();
     }
