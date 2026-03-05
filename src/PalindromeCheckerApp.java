@@ -1,20 +1,8 @@
 import java.util.Scanner;
 
-interface PalindromeStrategy {
-    boolean checkPalindrome(String str);
-}
+public class PalindromeCheckerApp {
 
-class ReverseStrategy implements PalindromeStrategy {
-
-    public boolean checkPalindrome(String str) {
-        String reversed = new StringBuilder(str).reverse().toString();
-        return str.equals(reversed);
-    }
-}
-
-class TwoPointerStrategy implements PalindromeStrategy {
-
-    public boolean checkPalindrome(String str) {
+    public static boolean method1(String str) {
 
         int start = 0;
         int end = str.length() - 1;
@@ -29,41 +17,34 @@ class TwoPointerStrategy implements PalindromeStrategy {
 
         return true;
     }
-}
 
-class PalindromeContext {
+    public static boolean method2(String str) {
 
-    private PalindromeStrategy strategy;
-
-    public void setStrategy(PalindromeStrategy strategy) {
-        this.strategy = strategy;
+        String reversed = new StringBuilder(str).reverse().toString();
+        return str.equals(reversed);
     }
-
-    public boolean executeStrategy(String str) {
-        return strategy.checkPalindrome(str);
-    }
-}
-
-public class PalindromeCheckerApp {
 
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("PALINDROME CHECKER APP - UC12");
+        System.out.println("PALINDROME CHECKER APP - UC13");
         System.out.print("Enter a string: ");
         String input = scanner.nextLine();
 
-        PalindromeContext context = new PalindromeContext();
+        long start1 = System.nanoTime();
+        boolean result1 = method1(input);
+        long end1 = System.nanoTime();
 
-        context.setStrategy(new ReverseStrategy());
-        boolean result1 = context.executeStrategy(input);
+        long start2 = System.nanoTime();
+        boolean result2 = method2(input);
+        long end2 = System.nanoTime();
 
-        context.setStrategy(new TwoPointerStrategy());
-        boolean result2 = context.executeStrategy(input);
+        System.out.println("Method 1 Result: " + result1);
+        System.out.println("Execution Time: " + (end1 - start1) + " ns");
 
-        System.out.println("Reverse Strategy Result: " + result1);
-        System.out.println("Two Pointer Strategy Result: " + result2);
+        System.out.println("Method 2 Result: " + result2);
+        System.out.println("Execution Time: " + (end2 - start2) + " ns");
 
         scanner.close();
     }
